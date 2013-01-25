@@ -31,13 +31,5 @@ module Goodreads
     def book_by_title(title)
       Hashie::Mash.new(request('/book/title', :title => title)['book'])
     end
-
-    # Add book as owned
-    # :book_id is required, see http://www.goodreads.com/api#owned_books.create
-    #
-    def add_book_owned(params)
-      oauth_request("http://www.goodreads.com/owned_books.xml", :post, params)
-    end
-
   end
 end

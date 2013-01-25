@@ -61,8 +61,11 @@ module Goodreads
     end
 
     def parse(resp)
-      hash = Hash.from_xml(resp.body)['GoodreadsResponse']
-      hash.delete('Request')
+      hash = Hash.from_xml(resp.body)
+      if hash.has_key?('GoodreadsResponse')
+        hash = hash['GoodreadsResponse']
+        hash.delete('Request')
+      end
       hash
     end
 

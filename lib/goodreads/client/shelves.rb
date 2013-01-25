@@ -22,5 +22,11 @@ module Goodreads
       })
     end
 
+    def add_shelf(shelf_name)
+      oauth_request("http://www.goodreads.com/user_shelves.xml",
+                    :post,
+                    {:user_shelf => {:name => shelf_name}})
+    end
+
   end
 end

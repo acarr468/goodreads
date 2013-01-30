@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.4'
   s.add_development_dependency 'yard',      '~> 0.6'
   
+  s.add_runtime_dependency 'addressable',   '~> 2.3'
   s.add_runtime_dependency 'rest-client',   '~> 1.6'
   s.add_runtime_dependency 'hashie',        '~> 1.0'
   s.add_runtime_dependency 'activesupport', '>= 3'

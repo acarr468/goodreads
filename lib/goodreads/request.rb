@@ -1,3 +1,4 @@
+require "addressable/uri"
 require 'rest-client'
 require 'active_support/core_ext'
 require 'hashie'
@@ -38,10 +39,17 @@ module Goodreads
       parse(resp)
     end
 
-    def oauth_request(path, params=nil)
+    def oauth_request(path='', method=:get, params=nil)
       raise 'OAuth access token required!' unless @oauth_token
-      path = "#{path}?#{params.map{|k,v|"#{k}=#{v}"}.join('&')}" if params
-      resp = @oauth_token.get(path)
+      if method == :get
+        if params
+          path = Addressable::URI.new(:path => path, :query_values => params).to_s
+        end
+        resp = @oauth_token.get(path)
+      elsif method == :post
+        resp = @oauth_token.post(path, params)
+      end
+
       case resp
       when Net::HTTPUnauthorized
         raise Goodreads::Unauthorized
@@ -53,8 +61,11 @@ module Goodreads
     end
 
     def parse(resp)
-      hash = Hash.from_xml(resp.body)['GoodreadsResponse']
-      hash.delete('Request')
+      hash = Hash.from_xml(resp.body)
+      if hash.has_key?('GoodreadsResponse')
+        hash = hash['GoodreadsResponse']
+        hash.delete('Request')
+      end
       hash
     end
 
